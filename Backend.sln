@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.Backend.Web.Models
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.Common", "CatiLyfe.Common\CatiLyfe.Common.csproj", "{176002B5-CE42-423F-8E91-73850C10CA7A}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CatiLyfe.Database", "CatiLyfe.Database\CatiLyfe.Database.sqlproj", "{15401C53-BE29-41A4-B260-D033F94AA1E3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.DataLayer", "CatiLyfe.DataLayer\CatiLyfe.DataLayer.csproj", "{3FE61AE2-C2A6-4868-8466-2A4CB48015A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.DataLayer.Sql", "CatiLyfe.DataLayer.Sql\CatiLyfe.DataLayer.Sql.csproj", "{40FF751D-3780-458A-9B4B-31ACF4B0DF19}"
@@ -35,12 +33,6 @@ Global
 		{176002B5-CE42-423F-8E91-73850C10CA7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{176002B5-CE42-423F-8E91-73850C10CA7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{176002B5-CE42-423F-8E91-73850C10CA7A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15401C53-BE29-41A4-B260-D033F94AA1E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15401C53-BE29-41A4-B260-D033F94AA1E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15401C53-BE29-41A4-B260-D033F94AA1E3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{15401C53-BE29-41A4-B260-D033F94AA1E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15401C53-BE29-41A4-B260-D033F94AA1E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15401C53-BE29-41A4-B260-D033F94AA1E3}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{3FE61AE2-C2A6-4868-8466-2A4CB48015A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3FE61AE2-C2A6-4868-8466-2A4CB48015A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FE61AE2-C2A6-4868-8466-2A4CB48015A1}.Release|Any CPU.ActiveCfg = Release|Any CPU

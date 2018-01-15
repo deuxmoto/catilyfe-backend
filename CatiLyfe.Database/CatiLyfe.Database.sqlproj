@@ -130,6 +130,7 @@
   <ItemGroup>
     <None Include="CatiLyfe.Database.publish.xml" />
     <None Include="error.sql" />
+    <None Include="CatiLyfe_1.Database.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

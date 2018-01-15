@@ -98,6 +98,14 @@ AS
     JOIN @selectedIds s
       ON s.id = pt.postid
 
-
+    -- Show the published users
+    SELECT
+        s.id
+       ,u.name
+    FROM @selectedIds s
+    JOIN cati.postmeta m
+      ON m.id = s.id
+    JOIN auth.users u
+      ON m.publisheduser = u.id
 
 RETURN 0

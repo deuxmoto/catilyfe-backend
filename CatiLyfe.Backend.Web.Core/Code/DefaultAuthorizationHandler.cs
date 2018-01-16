@@ -38,7 +38,11 @@ namespace CatiLyfe.Backend.Web.Core.Code
 
             try
             {
-                var user = (await this.authDataLayer.GetUser(null, null, null, Convert.FromBase64String(token.Value))).FirstOrDefault();
+                var user = (await this.authDataLayer.GetUser(
+                    ids: null,
+                    emails: null,
+                    names: null,
+                    token: Convert.FromBase64String(token.Value))).FirstOrDefault();
 
                 if (user == null)
                 {

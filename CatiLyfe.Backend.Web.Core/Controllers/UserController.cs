@@ -64,7 +64,12 @@
             var ids = id == null ? Enumerable.Empty<int>() : new[] { id.Value };
             var mails = email == null ? Enumerable.Empty<string>() : new[] { email };
  
-            var users = await this.authDataLayer.GetUser(ids, mails, null, null);
+            var users = await this.authDataLayer.GetUser(
+                ids: ids,
+                emails: mails,
+                names: null,
+                token: null);
+
             return users.Select(u => new UserModel(u));
         }
 
@@ -76,7 +81,11 @@
         public async Task<UserModel> GetSelf()
         {
             var userId = int.Parse(this.HttpContext.User.FindFirstValue(ClaimTypes.Sid));
-            var users = await this.authDataLayer.GetUser(new[] { userId }, null, null, null);
+            var users = await this.authDataLayer.GetUser(
+                ids: new[] { userId },
+                emails: null,
+                names: null,
+                token: null);
             return users.Select(u => new UserModel(u)).First();
         }
     }

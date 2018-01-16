@@ -9,6 +9,7 @@
    ,@ispublished   BIT
    ,@isreserved    BIT
    ,@revision      INT
+   ,@publisheduser INT
    ,@content       cati.postcontentlist READONLY
    ,@tags          cati.tagslist        READONLY
 AS
@@ -50,8 +51,15 @@ AS
         GOTO ErrorHandler
     END
 
+    IF (NOT EXISTS (SELECT TOP 1 1 FROM auth.users WHERE id = @publisheduser))
+    BEGIN
+        SET @error = @invalidArgs
+        SET @error_message = N'The published user id does not exist.'
+        GOTO ErrorHandler
+    END
+
     MERGE INTO cati.postmeta m
-    USING (SELECT @slug AS slug, @title AS title, @description AS description, @goeslive AS goeslive, @id AS id, @ispublished AS ispublished, @isreserved AS isreserved) AS src
+    USING (SELECT @slug AS slug, @title AS title, @description AS description, @goeslive AS goeslive, @id AS id, @ispublished AS ispublished, @isreserved AS isreserved, @publisheduser AS publisheduser) AS src
        ON m.id = src.id
     WHEN MATCHED THEN
         UPDATE SET
@@ -62,6 +70,7 @@ AS
            ,m.ispublished = src.ispublished
            ,m.isreserved = src.isreserved
            ,m.revision = m.revision + 1
+           ,m.publisheduser = src.publisheduser
     WHEN NOT MATCHED THEN
         INSERT
         (
@@ -72,6 +81,7 @@ AS
            ,created
            ,ispublished
            ,isreserved
+           ,publisheduser
         )
         VALUES
         (
@@ -80,8 +90,9 @@ AS
            ,src.description
            ,src.goeslive
            ,GETUTCDATE()
-           ,@ispublished
-           ,@isreserved
+           ,src.ispublished
+           ,src.isreserved
+           ,src.publisheduser
         );
 
     IF(@id IS NULL)

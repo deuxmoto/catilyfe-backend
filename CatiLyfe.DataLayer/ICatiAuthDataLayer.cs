@@ -14,11 +14,12 @@
         /// <summary>
         /// Gets all user information.
         /// </summary>
-        /// <param name="id">The id.</param>
-        /// <param name="email">The email.</param>
+        /// <param name="ids">The ids.</param>
+        /// <param name="emails">The emails.</param>
+        /// <param name="names">The names.</param>
         /// <param name="token">The token.</param>
         /// <returns>The <see cref="Task"/>.</returns>
-        Task<IEnumerable<User>> GetUser(int? id, string email, byte[] token);
+        Task<IEnumerable<User>> GetUser(IEnumerable<int> ids, IEnumerable<string> emails, IEnumerable<string> names, byte[] token);
 
         /// <summary>
         /// Creates a token for a user.

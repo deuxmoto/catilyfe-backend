@@ -46,6 +46,7 @@
         /// </summary>
         [Required]
         [MinLength(4, ErrorMessage ="Title must be more than 4")]
+        [MaxLength(256, ErrorMessage = "Cannot be longer than 256 characters.")]
         public string Title { get; set; }
 
         /// <summary>
@@ -72,6 +73,8 @@
         /// The post description.
         /// </summary>
         [Required]
+        [MinLength(4, ErrorMessage = "The desciption must be atleast 4 characters")]
+        [MaxLength(256, ErrorMessage = "The description shant be longer than 256 characters")]
         public string Description { get; set; }
 
         /// <summary>
@@ -93,6 +96,11 @@
         /// Gets or sets the post revision id.
         /// </summary>
         public int Revision { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Id of the author.
+        /// </summary>
+        public int AuthorId { get; set; }
 
         /// <summary>
         /// The tags for the post.
@@ -122,6 +130,7 @@
                 isPublished: this.IsPublished,
                 isDeleted: this.IsDeleted,
                 revision: this.Revision,
+                publishedUserId: this.AuthorId,
                 tags: this.Tags ?? Enumerable.Empty<string>(),
                 history: this.History?.Select(h => h.ToPostAuditHistory()) ?? Enumerable.Empty<PostAuditHistory>());
         }

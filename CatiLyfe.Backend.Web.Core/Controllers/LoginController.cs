@@ -41,7 +41,11 @@
         [HttpPut]
         public async Task<IActionResult> Login([FromBody]LoginCredentials credentials)
         {
-            var user = (await this.authDataLayer.GetUser(null, credentials.Email, null)).FirstOrDefault();
+            var user = (await this.authDataLayer.GetUser(
+                ids: null,
+                emails: new[] { credentials.Email },
+                names: null,
+                token: null)).FirstOrDefault();
 
             var hashedPassword = this.passwordHelper.HashPassword(credentials.Password);
 

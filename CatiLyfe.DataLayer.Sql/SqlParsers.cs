@@ -23,7 +23,8 @@ namespace CatiLyfe.DataLayer.Sql
                 isReserved: (bool)reader["isreserved"],
                 isPublished: (bool)reader["ispublished"],
                 isDeleted: (bool)reader["isdeleted"],
-                revision: (int)reader["revision"]);
+                revision: (int)reader["revision"],
+                publishedUserId: (int)reader["publisheduser"]);
         }
 
         /// <summary>

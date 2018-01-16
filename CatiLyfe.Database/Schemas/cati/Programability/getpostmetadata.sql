@@ -75,6 +75,7 @@ AS
        ,p.isreserved
        ,p.isdeleted
        ,p.revision
+       ,p.publisheduser
     FROM cati.postmeta p
     JOIN @selectedIds id
       ON id.id = p.id
@@ -97,7 +98,5 @@ AS
     FROM cati.postaudit pt
     JOIN @selectedIds s
       ON s.id = pt.postid
-
-
 
 RETURN 0

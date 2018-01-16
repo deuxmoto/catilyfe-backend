@@ -1,5 +1,6 @@
 ﻿namespace CatiLyfe.Backend.Web.Core.Code
 {
+    using CatiLyfe.Backend.Web.Models;
     using HeyRed.MarkdownSharp;
 
     /// <summary>

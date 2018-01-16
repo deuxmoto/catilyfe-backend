@@ -14,14 +14,15 @@
         /// Initializes a new instance of the <see cref="PostMetaModel"/> class.
         /// </summary>
         /// <param name="meta">The meta.</param>
-        public PostMetaModel(PostMeta meta)
+        public PostMetaModel(int id, string slug, string title, string description, DateTime whenPublished, string author, IEnumerable<string> tags)
         {
-            this.Id = meta.Id;
-            this.Slug = meta.Slug;
-            this.Title = meta.Title;
-            this.Description = meta.Description;
-            this.WhenPublished = meta.GoesLive;
-            this.Tags = meta.Tags;
+            this.Id = id;
+            this.Slug = slug;
+            this.Title = title;
+            this.Description = description;
+            this.WhenPublished = whenPublished;
+            this.Author = author;
+            this.Tags = tags;
         }
 
         public int Id { get; }
@@ -32,6 +33,8 @@
         public DateTimeOffset WhenPublished { get; }
 
         public string Description { get; }
+
+        public string Author { get; }
 
         public IEnumerable<string> Tags { get; }
     }

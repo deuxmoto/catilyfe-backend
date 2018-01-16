@@ -13,6 +13,7 @@ namespace CatiLyfe.Backend.Web.Core
 {
     using CatiLyfe.Backend.Web.Core.Code;
     using CatiLyfe.Backend.Web.Core.Code.Filters;
+    using CatiLyfe.Backend.Web.Models;
     using CatiLyfe.Common.Security;
     using CatiLyfe.DataLayer;
     using CatiLyfe.DataLayer.Sql;
@@ -48,12 +49,17 @@ namespace CatiLyfe.Backend.Web.Core
 
             var passwordSalt = security["salt"];
             var authDataLayer = CatiDataLayerFactory.CreateAuthDataLayer(constr);
+            var catiData = CatiDataLayerFactory.CreateDataLayer(constr);
+
+            var contentTransformer = new MarkdownProcessor();
+            var postTranslator = PostTranslatorFactory.Create(authDataLayer, contentTransformer);
 
             // Add the data layers.
-            services.AddSingleton<ICatiDataLayer>(CatiDataLayerFactory.CreateDataLayer(constr));
+            services.AddSingleton<ICatiDataLayer>(catiData);
             services.AddSingleton<ICatiAuthDataLayer>(authDataLayer);
+            services.AddSingleton<IPostTranslator>(postTranslator);
             services.AddSingleton<IPasswordHelper>(new PasswordGenerator(passwordSalt));
-            services.AddSingleton<IContentTransformer>(new MarkdownProcessor());
+            services.AddSingleton<IContentTransformer>(contentTransformer);
             services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>().AddAuthorization(
                 options =>
                     {

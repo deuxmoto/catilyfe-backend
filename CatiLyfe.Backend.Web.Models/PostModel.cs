@@ -14,21 +14,10 @@
         /// </summary>
         /// <param name="metadata">The metadata.</param>
         /// <param name="html">The html.</param>
-        private PostModel(PostMeta metadata, string html)
+        internal PostModel(PostMetaModel metadata, string html)
         {
-            this.Metadata = new PostMetaModel(metadata);
+            this.Metadata = metadata;
             this.RawHtmlThenIGuess = html;
-        }
-
-        /// <summary>
-        /// Create a post model.
-        /// </summary>
-        /// <param name="metadata">The metadata.</param>
-        /// <param name="content">The content.</param>
-        /// <returns>The <see cref="PostModel"/>.</returns>
-        public static PostModel Create(PostMeta metadata, string content)
-        {
-            return new PostModel(metadata, content);
         }
 
         /// <summary>

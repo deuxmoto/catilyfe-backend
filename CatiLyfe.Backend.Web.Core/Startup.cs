@@ -14,6 +14,8 @@ namespace CatiLyfe.Backend.Web.Core
     using CatiLyfe.Backend.Web.Core.Code;
     using CatiLyfe.Backend.Web.Core.Code.Filters;
     using CatiLyfe.Backend.Web.Models;
+    using CatiLyfe.Backend.Web.Core.Code.Trace;
+    using CatiLyfe.Common.Logging;
     using CatiLyfe.Common.Security;
     using CatiLyfe.DataLayer;
     using CatiLyfe.DataLayer.Sql;
@@ -28,9 +30,12 @@ namespace CatiLyfe.Backend.Web.Core
 
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly ILoggerFactory loggerFactory;
+
+        public Startup(IConfiguration configuration, ILoggerFactory logger)
         {
             this.Configuration = configuration;
+            this.loggerFactory = logger;
         }
 
         /// <summary>
@@ -51,10 +56,15 @@ namespace CatiLyfe.Backend.Web.Core
             var authDataLayer = CatiDataLayerFactory.CreateAuthDataLayer(constr);
             var catiData = CatiDataLayerFactory.CreateDataLayer(constr);
 
+            var trace = new WebAppTrace(this.loggerFactory);
+            trace.TraceInfo("Logger has been initialized.");
+
+
             var contentTransformer = new MarkdownProcessor();
             var postTranslator = PostTranslatorFactory.Create(authDataLayer, contentTransformer);
 
             // Add the data layers.
+            services.AddSingleton<IProgramTrace>(trace);
             services.AddSingleton<ICatiDataLayer>(catiData);
             services.AddSingleton<ICatiAuthDataLayer>(authDataLayer);
             services.AddSingleton<IPostTranslator>(postTranslator);

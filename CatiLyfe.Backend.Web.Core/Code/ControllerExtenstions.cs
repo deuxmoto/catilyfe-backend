@@ -29,13 +29,23 @@
         }
 
         /// <summary>
+        /// Gets the current user email.
+        /// </summary>
+        /// <param name="self">The controller.</param>
+        /// <returns>The user email.</returns>
+        public static string GetUserEmail(this Controller self)
+        {
+            return self.User.FindFirstValue(ClaimTypes.Email);
+        }
+
+        /// <summary>
         /// Creates user access details for the signed in user.
         /// </summary>
         /// <param name="self">The controller.</param>
         /// <returns>The user access details.</returns>
         public static UserAccessDetails GetUserAccessDetails(this Controller self)
         {
-            return new UserAccessDetails(self.GetUserId(), self.GetUserToken());
+            return new UserAccessDetails(self.GetUserId(), self.GetUserToken(), self.GetUserEmail());
         }
     }
 }

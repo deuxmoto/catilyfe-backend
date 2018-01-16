@@ -14,6 +14,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
     using CatiLyfe.Backend.Web.Core.Code;
+    using CatiLyfe.Common.Logging;
+    using CatiLyfe.Common.Exceptions;
 
     /// <summary>
     /// The login controller.
@@ -21,14 +23,26 @@
     [Route("[controller]")]
     public class LoginController : Controller
     {
-        private ICatiAuthDataLayer authDataLayer;
+        private readonly ICatiAuthDataLayer authDataLayer;
 
-        private IPasswordHelper passwordHelper;
+        private readonly IPasswordHelper passwordHelper;
 
-        public LoginController(ICatiAuthDataLayer authDatalayer, IPasswordHelper passwordHelper)
+        /// <summary>
+        /// The log tracer.
+        /// </summary>
+        private readonly IProgramTrace tracer;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoginController" class./>
+        /// </summary>
+        /// <param name="authDatalayer">The auth data layer.</param>
+        /// <param name="passwordHelper">The password helper.</param>
+        /// <param name="trace">The tracer.</param>
+        public LoginController(ICatiAuthDataLayer authDatalayer, IPasswordHelper passwordHelper, IProgramTrace trace)
         {
             this.authDataLayer = authDatalayer;
             this.passwordHelper = passwordHelper;
+            this.tracer = trace;
         }
 
         /// <summary>
@@ -41,6 +55,48 @@
         [HttpPut]
         public async Task<IActionResult> Login([FromBody]LoginCredentials credentials)
         {
+
+            bool result = false;
+            try
+            {
+                result = await this.LoginUser(credentials);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+
+            if (false == result)
+            {
+                this.tracer.TraceInfo($"Login failed for user Email: '{credentials.Email}'.");
+                throw new AuthFailureException();
+            }
+
+            this.tracer.TraceInfo($"Login accepted for user Email: '{credentials.Email}'.");
+            return this.NotFound();
+        }
+
+        [HttpDelete]
+        [Authorize(Policy = "default")]
+        public async Task<IActionResult> Logoff()
+        {
+            var user = this.GetUserAccessDetails();
+            await this.authDataLayer.DeauthorizeToken(user.UserId, Convert.FromBase64String(user.Token));
+
+            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            this.tracer.TraceInfo($"User has been logged off {user.Email}.");
+
+            return this.NoContent();
+        }
+
+        /// <summary>
+        /// Try to login a user.
+        /// </summary>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns>True on success.</returns>
+        private async Task<bool> LoginUser(LoginCredentials credentials)
+        {
             var user = (await this.authDataLayer.GetUser(
                 ids: null,
                 emails: new[] { credentials.Email },
@@ -49,7 +105,10 @@
 
             var hashedPassword = this.passwordHelper.HashPassword(credentials.Password);
 
-            this.passwordHelper.Validate(user.Password, hashedPassword);
+            if (false == this.passwordHelper.IsMatch(user.Password, hashedPassword))
+            {
+                return false;
+            }
 
             var token = this.passwordHelper.GenerateTokenBytes(64);
             var tokenExpiration = DateTime.UtcNow + TimeSpan.FromDays(8);
@@ -76,19 +135,8 @@
                 principal,
                 new AuthenticationProperties { IsPersistent = true });
 
-            return this.NoContent();
-        }
 
-        [HttpDelete]
-        [Authorize(Policy = "default")]
-        public async Task<IActionResult> Logoff()
-        {
-            var user = this.GetUserAccessDetails();
-            await this.authDataLayer.DeauthorizeToken(user.UserId, Convert.FromBase64String(user.Token));
-
-            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            return this.NoContent();
+            return true;
         }
     }
 }

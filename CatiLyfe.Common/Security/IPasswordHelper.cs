@@ -22,12 +22,11 @@
         byte[] GenerateTokenBytes(int length);
 
         /// <summary>
-        /// test two passwords for equality.
+        /// Test two passwords for equality.
         /// </summary>
         /// <param name="actualPassword">The actual password.</param>
         /// <param name="testPassword">The test password.</param>
-        /// <exception cref="AuthFailureException">On failure.
-        /// </exception>
-        void Validate(byte[] actualPassword, byte[] testPassword);
+        /// <returns>True if the password matches.</returns>
+        bool IsMatch(byte[] actualPassword, byte[] testPassword);
     }
 }

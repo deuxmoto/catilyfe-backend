@@ -6,6 +6,7 @@
     using System.Text;
 
     using CatiLyfe.Common.Exceptions;
+    using CatiLyfe.Common.Logging;
 
     /// <summary>
     /// The password generator.
@@ -18,12 +19,17 @@
         private readonly byte[] saltBytes;
 
         /// <summary>
+        /// The tracer.
+        /// </summary>
+        private readonly IProgramTrace trace;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PasswordGenerator"/> class.
         /// </summary>
         /// <param name="passwordSalt">The password salt.</param>
         public PasswordGenerator(string passwordSalt)
         {
-           this.saltBytes = Encoding.Unicode.GetBytes(passwordSalt);
+            this.saltBytes = Encoding.Unicode.GetBytes(passwordSalt);
         }
 
         /// <summary>
@@ -64,22 +70,23 @@
         /// </summary>
         /// <param name="actualPassword">The actual password.</param>
         /// <param name="testPassword">The test password.</param>
-        /// <exception cref="AuthFailureException">On failure.
-        /// </exception>
-        public void Validate(byte[] actualPassword, byte[] testPassword)
+        /// <returns>True on match.</returns>
+        public bool IsMatch(byte[] actualPassword, byte[] testPassword)
         {
             if (actualPassword.Length != testPassword.Length)
             {
-                throw new AuthFailureException();
+                return false;
             }
 
             for (var i = 0; i < actualPassword.Length; i++)
             {
                 if (actualPassword[i] != testPassword[i])
                 {
-                    throw new AuthFailureException();
+                    return false;
                 }
             }
+
+            return true;
         }
     }
 }

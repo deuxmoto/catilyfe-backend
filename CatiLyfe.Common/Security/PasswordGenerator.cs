@@ -11,37 +11,19 @@
     /// <summary>
     /// The password generator.
     /// </summary>
-    public class PasswordGenerator : IPasswordHelper
+    public static class PasswordGenerator
     {
-        /// <summary>
-        /// The salt bytes.
-        /// </summary>
-        private readonly byte[] saltBytes;
-
-        /// <summary>
-        /// The tracer.
-        /// </summary>
-        private readonly IProgramTrace trace;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PasswordGenerator"/> class.
-        /// </summary>
-        /// <param name="passwordSalt">The password salt.</param>
-        public PasswordGenerator(string passwordSalt)
-        {
-            this.saltBytes = Encoding.Unicode.GetBytes(passwordSalt);
-        }
-
         /// <summary>
         /// Hashes a password.
         /// </summary>
+        /// <param name="salt">The password salt.</param>
         /// <param name="password">The password.</param>
         /// <returns>The hashed password.</returns>
-        public byte[] HashPassword(string password)
+        public static byte[] HashPassword(byte[] salt, string password)
         {
             var passwordBytes = Encoding.Unicode.GetBytes(password);
 
-            var binary = this.saltBytes.Concat(passwordBytes).ToArray();
+            var binary = salt.Concat(passwordBytes).ToArray();
 
             using (var hash = SHA512Managed.Create())
             {
@@ -54,7 +36,7 @@
         /// </summary>
         /// <param name="length">The length in bytes.</param>
         /// <returns>The random bytes.</returns>
-        public byte[] GenerateTokenBytes(int length)
+        public static byte[] GenerateRandom(int length)
         {
             var bytes = new byte[length];
             using (var random = RandomNumberGenerator.Create())
@@ -71,7 +53,7 @@
         /// <param name="actualPassword">The actual password.</param>
         /// <param name="testPassword">The test password.</param>
         /// <returns>True on match.</returns>
-        public bool IsMatch(byte[] actualPassword, byte[] testPassword)
+        public static bool IsMatch(byte[] actualPassword, byte[] testPassword)
         {
             if (actualPassword.Length != testPassword.Length)
             {

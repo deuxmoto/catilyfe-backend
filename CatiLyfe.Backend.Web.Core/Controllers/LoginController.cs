@@ -25,8 +25,6 @@
     {
         private readonly ICatiAuthDataLayer authDataLayer;
 
-        private readonly IPasswordHelper passwordHelper;
-
         /// <summary>
         /// The log tracer.
         /// </summary>
@@ -36,12 +34,10 @@
         /// Initializes a new instance of the <see cref="LoginController" class./>
         /// </summary>
         /// <param name="authDatalayer">The auth data layer.</param>
-        /// <param name="passwordHelper">The password helper.</param>
         /// <param name="trace">The tracer.</param>
-        public LoginController(ICatiAuthDataLayer authDatalayer, IPasswordHelper passwordHelper, IProgramTrace trace)
+        public LoginController(ICatiAuthDataLayer authDatalayer, IProgramTrace trace)
         {
             this.authDataLayer = authDatalayer;
-            this.passwordHelper = passwordHelper;
             this.tracer = trace;
         }
 
@@ -73,7 +69,7 @@
             }
 
             this.tracer.TraceInfo($"Login accepted for user Email: '{credentials.Email}'.");
-            return this.NotFound();
+            return this.NoContent();
         }
 
         [HttpDelete]
@@ -103,14 +99,15 @@
                 names: null,
                 token: null)).FirstOrDefault();
 
-            var hashedPassword = this.passwordHelper.HashPassword(credentials.Password);
+            // Hash the password with the salt
+            var hashedPassword = PasswordGenerator.HashPassword(user.Salt, credentials.Password);
 
-            if (false == this.passwordHelper.IsMatch(user.Password, hashedPassword))
+            if (false == PasswordGenerator.IsMatch(user.Password, hashedPassword))
             {
                 return false;
             }
 
-            var token = this.passwordHelper.GenerateTokenBytes(64);
+            var token = PasswordGenerator.GenerateRandom(64);
             var tokenExpiration = DateTime.UtcNow + TimeSpan.FromDays(8);
 
             await this.authDataLayer.CreateToken(

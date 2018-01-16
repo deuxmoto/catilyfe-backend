@@ -49,19 +49,5 @@
 
         [DataMember]
         public IEnumerable<string> Roles { get; set; }
-
-        /// <summary>
-        /// Convert a user to 
-        /// </summary>
-        /// <param name="passwordHelper">The password helper.</param>
-        /// <returns>The user.</returns>
-        public User ToUser(IPasswordHelper passwordHelper)
-        {
-            var password = string.IsNullOrWhiteSpace(this.Password)
-                               ? null
-                               : passwordHelper.HashPassword(this.Password);
-
-            return new User(this.Id, this.Name, this.Email, password, new HashSet<string>(this.Roles));
-        }
     }
 }

@@ -84,7 +84,7 @@ namespace CatiLyfe.DataLayer.Sql
         /// <returns>The user.</returns>
         public static User ParseUser(SqlDataReader reader)
         {
-            return new User((int)reader["id"], (string)reader["name"], (string)reader["email"], (byte[])reader["pass"]);
+            return new User((int)reader["id"], (string)reader["name"], (string)reader["email"], (byte[])reader["salt"], (byte[])reader["pass"]);
         }
 
         /// <summary>

@@ -51,6 +51,7 @@ AS
         u.id
        ,u.name
        ,u.email
+       ,u.salt
        ,u.pass
     FROM auth.users u
     JOIN @selectedids si

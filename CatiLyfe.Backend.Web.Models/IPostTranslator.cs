@@ -1,4 +1,5 @@
-﻿using CatiLyfe.DataLayer.Models;
+﻿using CatiLyfe.Backend.Web.Models.User;
+using CatiLyfe.DataLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,5 +22,12 @@ namespace CatiLyfe.Backend.Web.Models
         /// <param name="metas"></param>
         /// <returns></returns>
         Task<IReadOnlyCollection<PostMetaModel>> GetMetaDatas(ICollection<PostMeta> metas);
+
+        /// <summary>
+        /// Translates a user model to a user.
+        /// </summary>
+        /// <param name="model">The user model.</param>
+        /// <returns>The user.</returns>
+        Task<CatiLyfe.DataLayer.Models.User> TranslateUser(UserModel model);
     }
 }

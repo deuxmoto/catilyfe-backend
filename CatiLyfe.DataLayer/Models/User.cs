@@ -13,16 +13,23 @@
         /// <param name="id">The id.</param>
         /// <param name="name">The name.</param>
         /// <param name="email">The email.</param>
+        /// <param name="salt">The password salt.</param>
         /// <param name="password">The user password.</param>
         /// <param name="roles">The user roles.</param>
-        public User(int? id, string name, string email, byte[] password, HashSet<string> roles = null)
+        public User(int? id, string name, string email, byte[] salt, byte[] password, HashSet<string> roles = null)
         {
             this.Id = id;
             this.Name = name;
             this.Email = email;
+            this.Salt = salt;
             this.Password = password;
             this.Roles = roles;
         }
+
+        /// <summary>
+        /// Gets the password salt.
+        /// </summary>
+        public byte[] Salt { get; }
 
         /// <summary>
         /// Gets the password.

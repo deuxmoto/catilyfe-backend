@@ -50,9 +50,6 @@ namespace CatiLyfe.Backend.Web.Core
         public void ConfigureServices(IServiceCollection services)
         {
             var constr = this.Configuration.GetConnectionString("default");
-            var security = this.Configuration.GetSection("Security");
-
-            var passwordSalt = security["salt"];
             var authDataLayer = CatiDataLayerFactory.CreateAuthDataLayer(constr);
             var catiData = CatiDataLayerFactory.CreateDataLayer(constr);
 
@@ -68,7 +65,6 @@ namespace CatiLyfe.Backend.Web.Core
             services.AddSingleton<ICatiDataLayer>(catiData);
             services.AddSingleton<ICatiAuthDataLayer>(authDataLayer);
             services.AddSingleton<IPostTranslator>(postTranslator);
-            services.AddSingleton<IPasswordHelper>(new PasswordGenerator(passwordSalt));
             services.AddSingleton<IContentTransformer>(contentTransformer);
             services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>().AddAuthorization(
                 options =>

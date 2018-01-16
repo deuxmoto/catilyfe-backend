@@ -16,8 +16,7 @@
         [TestMethod]
         public void TestGetRandomBytes()
         {
-            var generator = new PasswordGenerator("asdf");
-            var bytes = generator.GenerateTokenBytes(100);
+            var bytes = PasswordGenerator.GenerateRandom(100);
 
             Assert.AreEqual(100, bytes.Length);
             Assert.IsTrue(bytes.Any(b => b != 0));

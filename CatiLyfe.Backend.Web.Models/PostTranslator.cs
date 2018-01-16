@@ -1,4 +1,6 @@
-﻿using CatiLyfe.DataLayer;
+﻿using CatiLyfe.Backend.Web.Models.User;
+using CatiLyfe.Common.Security;
+using CatiLyfe.DataLayer;
 using CatiLyfe.DataLayer.Models;
 using System;
 using System.Collections.Generic;
@@ -69,6 +71,25 @@ namespace CatiLyfe.Backend.Web.Models
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Translates a user model to a user.
+        /// </summary>
+        /// <param name="model">The user model.</param>
+        /// <returns>The user.</returns>
+        public Task<DataLayer.Models.User> TranslateUser(UserModel model)
+        {
+            byte[] password = null;
+            byte[] salt = null;
+            if(null != model.Password)
+            {
+                salt = PasswordGenerator.GenerateRandom(64);
+                password = PasswordGenerator.HashPassword(salt, model.Password);
+            }
+
+            var result = new DataLayer.Models.User(model.Id, model.Name, model.Email, salt, password, model.Roles.ToHashSet());
+            return Task.FromResult(result);
         }
     }
 }

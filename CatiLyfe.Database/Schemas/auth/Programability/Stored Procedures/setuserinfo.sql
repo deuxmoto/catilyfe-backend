@@ -3,6 +3,7 @@
    ,@id             INT           = NULL
    ,@name           NVARCHAR(128) = NULL
    ,@email          NVARCHAR(256) = NULL
+   ,@salt           BINARY(64)    = NULL
    ,@password       BINARY(64)    = NULL
    ,@rolelist       auth.rolelist READONLY
 AS
@@ -19,7 +20,7 @@ AS
 
     IF (@id IS NULL)
     BEGIN
-        IF (@email IS NULL OR @password IS NULL OR @name IS NULL)
+        IF (@email IS NULL OR @password IS NULL OR @name IS NULL OR @salt IS NULL)
         BEGIN
             SET @error = @invalidArgs
             SET @error_message = N'The arguments for creating a new user are invalid'
@@ -37,12 +38,14 @@ AS
         (
             name
            ,email
+           ,salt
            ,pass
         )
         VALUES
         (
             @name
            ,@email
+           ,@salt
            ,@password
         )
 
@@ -54,6 +57,7 @@ AS
         UPDATE auth.users
         SET name = ISNULL(@name, name)
            ,email = ISNULL(@email, email)
+           ,salt = ISNULL(@salt, salt)
            ,pass = ISNULL(@password, pass)
         WHERE id = @id
 

@@ -612,6 +612,7 @@
                         parameters.AddWithValue("id", usermodel.Id);
                         parameters.AddWithValue("name", usermodel.Name);
                         parameters.AddWithValue("email", usermodel.Email);
+                        parameters.AddWithValue("salt", usermodel.Salt);
                         parameters.AddWithValue("password", usermodel.Password);
                         var rolelist = parameters.AddWithValue(
                             "rolelist",

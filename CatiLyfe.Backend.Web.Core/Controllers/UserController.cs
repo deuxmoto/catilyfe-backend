@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
-
+    using CatiLyfe.Backend.Web.Models;
     using CatiLyfe.Backend.Web.Models.User;
     using CatiLyfe.Common.Security;
     using CatiLyfe.DataLayer;
@@ -27,16 +27,16 @@
         /// <summary>
         /// The password helper.
         /// </summary>
-        private readonly IPasswordHelper passwordHelper;
+        private readonly IPostTranslator postTranslator;
 
         /// <summary>
         /// Initializes the post metadata controller.
         /// </summary>
         /// <param name="authDataLayer">The auth data layer.</param>
-        public UserController(ICatiAuthDataLayer authDataLayer, IPasswordHelper passwordHelper)
+        public UserController(ICatiAuthDataLayer authDataLayer, IPostTranslator translator)
         {
             this.authDataLayer = authDataLayer;
-            this.passwordHelper = passwordHelper;
+            this.postTranslator = translator;
         }
 
         /// <summary>
@@ -46,9 +46,10 @@
         /// <returns>Nothing, or an error on failure.</returns>
         [HttpPut]
         [Authorize(Policy = "default", Roles = "god-post,user-add,user-edit")]
-        public Task SetUser([FromBody]UserModel userModel)
+        public async Task SetUser([FromBody]UserModel userModel)
         {
-            return this.authDataLayer.SetUser(userModel.ToUser(this.passwordHelper));
+            var user = await this.postTranslator.TranslateUser(userModel);
+            await this.authDataLayer.SetUser(user);
         }
 
         /// <summary>

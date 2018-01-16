@@ -54,7 +54,7 @@ AS
     IF (NOT EXISTS (SELECT TOP 1 1 FROM auth.users WHERE id = @publisheduser))
     BEGIN
         SET @error = @invalidArgs
-        SET @error_message = N'THe published user id does not exist.'
+        SET @error_message = N'The published user id does not exist.'
         GOTO ErrorHandler
     END
 

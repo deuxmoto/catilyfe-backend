@@ -24,7 +24,7 @@
         /// <parma name="revision">The revision id.</parma>
         /// <param name="tags">The tags.</param>
         /// <param name="history">The post audit history.</param>
-        public PostMeta(int id, string slug, string title, string description, DateTimeOffset whencreated, DateTimeOffset goeslive, bool isReserved, bool isPublished, bool isDeleted, int revision, IEnumerable<string> tags = null, IEnumerable<PostAuditHistory> history = null)
+        public PostMeta(int id, string slug, string title, string description, DateTimeOffset whencreated, DateTimeOffset goeslive, bool isReserved, bool isPublished, bool isDeleted, int revision, int publishedUserId, IEnumerable<string> tags = null, IEnumerable<PostAuditHistory> history = null)
         {
             this.Id = id;
             this.Slug = slug;
@@ -36,6 +36,7 @@
             this.IsPublished = isPublished;
             this.IsDeleted = isDeleted;
             this.Revision = revision;
+            this.PublishedUser = publishedUserId;
             this.Tags = tags ?? Enumerable.Empty<string>();
             this.History = history ?? Enumerable.Empty<PostAuditHistory>();
         }
@@ -89,6 +90,11 @@
         /// Gets the post revision.
         /// </summary>
         public int Revision { get; }
+
+        /// <summary>
+        /// The id of the published user.
+        /// </summary>
+        public int PublishedUser { get; }
 
         /// <summary>
         /// The tags associated with the post.

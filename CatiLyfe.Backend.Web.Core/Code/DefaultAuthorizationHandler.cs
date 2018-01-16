@@ -38,7 +38,7 @@ namespace CatiLyfe.Backend.Web.Core.Code
 
             try
             {
-                var user = (await this.authDataLayer.GetUser(null, null, Convert.FromBase64String(token.Value))).FirstOrDefault();
+                var user = (await this.authDataLayer.GetUser(null, null, null, Convert.FromBase64String(token.Value))).FirstOrDefault();
 
                 if (user == null)
                 {
@@ -60,7 +60,7 @@ namespace CatiLyfe.Backend.Web.Core.Code
 
                 context.Succeed(requirement);
             }
-            catch
+            catch(Exception ex)
             {
                 // Nuffin
                 context.Fail();

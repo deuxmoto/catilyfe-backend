@@ -13,6 +13,9 @@
     using Microsoft.SqlServer.Server;
     using System.Data;
 
+    /// <summary>
+    /// The data layer for cati lyfe.
+    /// </summary>
     internal sealed class CatiSqlDataLayer : ICatiDataLayer, ICatiAuthDataLayer
     {
         private readonly string connectionString;
@@ -207,6 +210,7 @@
                                       parmeters.AddWithValue("ispublished", post.MetaData.IsPublished);
                                       parmeters.AddWithValue("isreserved", post.MetaData.IsReserved);
                                       parmeters.AddWithValue("revision", post.MetaData.Revision);
+                                      parmeters.AddWithValue("publisheduser", post.MetaData.PublishedUser);
 
                                       var contentList = parmeters.AddWithValue(
                                           "content",
@@ -434,6 +438,36 @@
         }
 
         /// <summary>
+        /// Create a string list.
+        /// </summary>
+        /// <param name="strings">The strings.</param>
+        /// <returns>A string list.</returns>
+        private static IEnumerable<SqlDataRecord> CreateStringList(IEnumerable<string> strings)
+        {
+            return strings.ToDataTable(
+                () => new[] { new SqlMetaData("string", SqlDbType.NVarChar, 256) },
+                (record, tag) =>
+                {
+                    record.SetValue(0, tag);
+                });
+        }
+
+        /// <summary>
+        /// Create an ID list.
+        /// </summary>
+        /// <param name="ids">The ids to add.</param>
+        /// <returns>An id list.</returns>
+        private static IEnumerable<SqlDataRecord> CreateIdList(IEnumerable<int> ids)
+        {
+            return ids.ToDataTable(
+                () => new[] { new SqlMetaData("id", SqlDbType.Int) },
+                (record, tag) =>
+                {
+                    record.SetValue(0, tag);
+                });
+        }
+
+        /// <summary>
         /// Gets records for post content.
         /// </summary>
         /// <param name="content">The content of the post.</param>
@@ -499,14 +533,30 @@
         /// <param name="email">The email.</param>
         /// <param name="token">The token.</param>
         /// <returns>The <see cref="Task"/>.</returns>
-        public async Task<IEnumerable<User>> GetUser(int? id, string email, byte[] token)
+        public async Task<IEnumerable<User>> GetUser(IEnumerable<int> ids, IEnumerable<string> emails, IEnumerable<string> names, byte[] token)
         {
             var result = await this.ExecuteReader(
-                "auth.getuserinfo",
+                "auth.getuserinfo2",
                 parameters =>
                 {
-                    parameters.AddWithValue("id", id);
-                    parameters.AddWithValue("email", email);
+                    var idParam = parameters.AddWithValue(
+                                          "ids",
+                                          CatiSqlDataLayer.CreateIdList(ids));
+                    idParam.SqlDbType = SqlDbType.Structured;
+                    idParam.TypeName = "auth.idlist";
+
+                    var emailParam = parameters.AddWithValue(
+                                          "emails",
+                                          CatiSqlDataLayer.CreateStringList(emails));
+                    emailParam.SqlDbType = SqlDbType.Structured;
+                    emailParam.TypeName = "auth.stringlist";
+
+                    var nameParam = parameters.AddWithValue(
+                                          "names",
+                                          CatiSqlDataLayer.CreateStringList(names));
+                    nameParam.SqlDbType = SqlDbType.Structured;
+                    nameParam.TypeName = "auth.stringlist";
+
                     parameters.AddWithValue("token", token);
                 },
                 SqlParsers.ParseRole,

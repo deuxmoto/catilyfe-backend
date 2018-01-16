@@ -41,16 +41,17 @@ AS
 
     DECLARE @selected TABLE
     (
-        id          INT             NOT NULL
-       ,slug        NVARCHAR(256)   NOT NULL
-       ,title       NVARCHAR(256)   NOT NULL
-       ,goeslive    DATETIME2       NOT NULL
-       ,created     DATETIME2       NOT NULL
-       ,description NVARCHAR(256)   NOT NULL
-       ,ispublished BIT             NOT NULL
-       ,isreserved  BIT             NOT NULL
-       ,isdeleted   BIT             NOT NULL
-       ,revision    INT             NOT NULL
+        id              INT             NOT NULL
+       ,slug            NVARCHAR(256)   NOT NULL
+       ,title           NVARCHAR(256)   NOT NULL
+       ,goeslive        DATETIME2       NOT NULL
+       ,created         DATETIME2       NOT NULL
+       ,description     NVARCHAR(256)   NOT NULL
+       ,ispublished     BIT             NOT NULL
+       ,isreserved      BIT             NOT NULL
+       ,isdeleted       BIT             NOT NULL
+       ,revision        INT             NOT NULL
+       ,publisheduser   INT             NOT NULL
     )
 
     INSERT INTO @selected
@@ -65,6 +66,7 @@ AS
        ,m.isreserved
        ,m.isdeleted
        ,m.revision
+       ,m.publisheduser
     FROM cati.postmeta m
     WHERE ((m.goeslive BETWEEN @startdate AND @enddate) OR @startdate IS NULL)
       AND (isdeleted = 0 OR @includeDeleted = 1)
@@ -109,16 +111,6 @@ AS
     FROM cati.postaudit pt
     JOIN @selected s
       ON s.id = pt.postid
-
-    -- Show the published users
-    SELECT
-        s.id
-       ,u.name
-    FROM @selected s
-    JOIN cati.postmeta m
-      ON m.id = s.id
-    JOIN auth.users u
-      ON m.publisheduser = u.id
 
 ErrorHandler:
     RETURN @error

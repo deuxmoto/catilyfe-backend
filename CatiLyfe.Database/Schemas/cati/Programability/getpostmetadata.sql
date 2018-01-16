@@ -75,6 +75,7 @@ AS
        ,p.isreserved
        ,p.isdeleted
        ,p.revision
+       ,p.publisheduser
     FROM cati.postmeta p
     JOIN @selectedIds id
       ON id.id = p.id
@@ -97,15 +98,5 @@ AS
     FROM cati.postaudit pt
     JOIN @selectedIds s
       ON s.id = pt.postid
-
-    -- Show the published users
-    SELECT
-        s.id
-       ,u.name
-    FROM @selectedIds s
-    JOIN cati.postmeta m
-      ON m.id = s.id
-    JOIN auth.users u
-      ON m.publisheduser = u.id
 
 RETURN 0

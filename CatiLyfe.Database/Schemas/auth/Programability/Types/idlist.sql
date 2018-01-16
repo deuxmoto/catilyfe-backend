@@ -1,0 +1,4 @@
+﻿CREATE TYPE auth.idlist AS TABLE
+(
+    id INT NOT NULL PRIMARY KEY
+)

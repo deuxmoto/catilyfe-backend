@@ -126,11 +126,13 @@
     <Build Include="Schemas\cati\Tables\Constraints\post_uniqueid_default.sql" />
     <Build Include="Schemas\cati\Index\ncl_postcontent_uniqueid.sql" />
     <Build Include="Schemas\cati\Tables\Constraints\publisheduser_default.sql" />
+    <Build Include="Schemas\auth\Programability\Stored Procedures\getuserinfo2.sql" />
+    <Build Include="Schemas\auth\Programability\Types\idlist.sql" />
+    <Build Include="Schemas\auth\Programability\Types\stringlist.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CatiLyfe.Database.publish.xml" />
     <None Include="error.sql" />
-    <None Include="CatiLyfe_1.Database.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -13,6 +13,7 @@ namespace CatiLyfe.Backend.Web.Core
 {
     using CatiLyfe.Backend.Web.Core.Code;
     using CatiLyfe.Backend.Web.Core.Code.Filters;
+    using CatiLyfe.Backend.Web.Models;
     using CatiLyfe.Backend.Web.Core.Code.Trace;
     using CatiLyfe.Common.Logging;
     using CatiLyfe.Common.Security;
@@ -53,17 +54,22 @@ namespace CatiLyfe.Backend.Web.Core
 
             var passwordSalt = security["salt"];
             var authDataLayer = CatiDataLayerFactory.CreateAuthDataLayer(constr);
+            var catiData = CatiDataLayerFactory.CreateDataLayer(constr);
 
             var trace = new WebAppTrace(this.loggerFactory);
             trace.TraceInfo("Logger has been initialized.");
 
 
+            var contentTransformer = new MarkdownProcessor();
+            var postTranslator = PostTranslatorFactory.Create(authDataLayer, contentTransformer);
+
             // Add the data layers.
             services.AddSingleton<IProgramTrace>(trace);
-            services.AddSingleton<ICatiDataLayer>(CatiDataLayerFactory.CreateDataLayer(constr));
+            services.AddSingleton<ICatiDataLayer>(catiData);
             services.AddSingleton<ICatiAuthDataLayer>(authDataLayer);
+            services.AddSingleton<IPostTranslator>(postTranslator);
             services.AddSingleton<IPasswordHelper>(new PasswordGenerator(passwordSalt));
-            services.AddSingleton<IContentTransformer>(new MarkdownProcessor());
+            services.AddSingleton<IContentTransformer>(contentTransformer);
             services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>().AddAuthorization(
                 options =>
                     {

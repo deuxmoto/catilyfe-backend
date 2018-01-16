@@ -22,12 +22,25 @@
         private readonly ICatiDataLayer datalayer;
 
         /// <summary>
+        /// The authorization data layer.
+        /// </summary>
+        private readonly ICatiAuthDataLayer authDataLayer;
+
+        /// <summary>
+        /// The post translator.
+        /// </summary>
+        private readonly IPostTranslator postTranslator;
+
+        /// <summary>
         /// Initializes the post metadata controller.
         /// </summary>
         /// <param name="datalayer">The data layer.</param>
-        public PostMetaDataController(ICatiDataLayer datalayer)
+        /// <param name="authData">The authorization data.</param>
+        public PostMetaDataController(ICatiDataLayer datalayer, ICatiAuthDataLayer authData, IPostTranslator postTranslator)
         {
             this.datalayer = datalayer;
+            this.authDataLayer = authData;
+            this.postTranslator = postTranslator;
         }
 
         /// <summary>
@@ -55,7 +68,8 @@
                             includeUnpublished: false,
                             includeDeleted: false,
                             tags: tags ?? Enumerable.Empty<string>());
-            return metas.Where(m => false == m.IsReserved).Select(m => new PostMetaModel(m));
+
+            return await this.postTranslator.GetMetaDatas(metas.Where(m => false == m.IsReserved).ToList());
         }
     }
 }

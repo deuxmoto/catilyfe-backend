@@ -23,18 +23,18 @@
         private readonly ICatiDataLayer datalayer;
 
         /// <summary>
-        /// The content transformer.
+        /// The post translator.
         /// </summary>
-        private readonly IContentTransformer contentTransformer;
+        private readonly IPostTranslator postTranslator;
 
         /// <summary>
         /// Initializes the post controller.
         /// </summary>
         /// <param name="datalayer">The data layer.</param>
-        public PostController(ICatiDataLayer datalayer, IContentTransformer contentTransformer)
+        public PostController(ICatiDataLayer datalayer, IPostTranslator translator)
         {
             this.datalayer = datalayer;
-            this.contentTransformer = contentTransformer;
+            this.postTranslator = translator;
         }
 
         /// <summary>
@@ -57,10 +57,8 @@
                             includeUnpublished: false,
                             includeDeleted: false,
                             tags: tags ?? Enumerable.Empty<string>());
-            return posts.Where(predicate: p => false == p.MetaData.IsReserved).Select(
-                selector: p => PostModel.Create(
-                    metadata: p.MetaData,
-                    content: this.contentTransformer.TransformMarkdown(markdown: p.PostContent.First().Content)));
+
+            return await this.postTranslator.GetPostModels(posts.Where(p => false == p.MetaData.IsReserved).ToList());
         }
 
         /// <summary>
@@ -72,7 +70,9 @@
         public async Task<PostModel> GetSingle(string slug)
         {
             var post = await this.datalayer.GetPost(slug: slug, includeUnpublished: false, includeDeleted: false);
-            return PostModel.Create(post.MetaData, this.contentTransformer.TransformMarkdown(post.PostContent.First().Content));
+            var translated = await this.postTranslator.GetPostModels(new[] { post });
+
+            return translated.Single();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace CatiLyfe.Backend.Web.Core.Code
+﻿namespace CatiLyfe.Backend.Web.Models
 {
     public interface IContentTransformer
     {

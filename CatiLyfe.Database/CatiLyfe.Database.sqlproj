@@ -73,6 +73,10 @@
     <Folder Include="Schemas\auth\Tables\Indexs" />
     <Folder Include="Schemas\auth\Programability\Types" />
     <Folder Include="Schemas\cati\Catalogs" />
+    <Folder Include="Schemas\img" />
+    <Folder Include="Schemas\img\Tables" />
+    <Folder Include="Schemas\img\Index" />
+    <Folder Include="Schemas\img\Programmability" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schemas\cati\cati.sql" />
@@ -129,6 +133,14 @@
     <Build Include="Schemas\auth\Programability\Stored Procedures\getuserinfo2.sql" />
     <Build Include="Schemas\auth\Programability\Types\idlist.sql" />
     <Build Include="Schemas\auth\Programability\Types\stringlist.sql" />
+    <Build Include="Schemas\img\img.sql" />
+    <Build Include="Schemas\img\Tables\images.sql" />
+    <Build Include="Schemas\img\Tables\links.sql" />
+    <Build Include="Schemas\img\Index\pk_image.sql" />
+    <Build Include="Schemas\img\Index\pk_links.sql" />
+    <Build Include="Schemas\img\Programmability\getimage.sql" />
+    <Build Include="Schemas\img\Programmability\setimagedetails.sql" />
+    <Build Include="Schemas\img\Programmability\setimagelink.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CatiLyfe.Database.publish.xml" />

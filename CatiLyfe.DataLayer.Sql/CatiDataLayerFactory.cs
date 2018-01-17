@@ -9,7 +9,12 @@
 
         public static ICatiAuthDataLayer CreateAuthDataLayer(string connectionString)
         {
-            return new CatiSqlDataLayer(connectionString);
+            return new CatiAuthDatalayer(connectionString);
+        }
+
+        public static ICatiImageDataLayer CreateImageDataLayer(string connectionString)
+        {
+            return new CatiImageDataLayer(connectionString);
         }
     }
 }

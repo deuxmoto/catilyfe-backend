@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.DataLayer", "CatiL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.DataLayer.Sql", "CatiLyfe.DataLayer.Sql\CatiLyfe.DataLayer.Sql.csproj", "{40FF751D-3780-458A-9B4B-31ACF4B0DF19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatiLyfe.Common.MSTest", "Unit\CatiLyfe.Common.MSTest\CatiLyfe.Common.MSTest.csproj", "{8D518533-95AF-43C7-847D-39590BDBC568}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.Common.MSTest", "Unit\CatiLyfe.Common.MSTest\CatiLyfe.Common.MSTest.csproj", "{8D518533-95AF-43C7-847D-39590BDBC568}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatiLyfe.DataLayer.MSTest", "Unit\CatiLyfe.DataLayer.MSTest\CatiLyfe.DataLayer.MSTest.csproj", "{D42ADF1B-4D98-41E1-8F25-793795A724BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{8D518533-95AF-43C7-847D-39590BDBC568}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D518533-95AF-43C7-847D-39590BDBC568}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D518533-95AF-43C7-847D-39590BDBC568}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D42ADF1B-4D98-41E1-8F25-793795A724BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D42ADF1B-4D98-41E1-8F25-793795A724BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D42ADF1B-4D98-41E1-8F25-793795A724BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D42ADF1B-4D98-41E1-8F25-793795A724BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

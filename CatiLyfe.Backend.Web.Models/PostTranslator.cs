@@ -65,7 +65,9 @@ namespace CatiLyfe.Backend.Web.Models
             var results = new List<PostMetaModel>();
             foreach(var user in metas)
             {
-                var model = new PostMetaModel(user.Id, user.Slug, user.Title, user.Description, user.GoesLive.DateTime, userslookup[user.PublishedUser].Single().Name, user.Tags);
+                var userInfo = userslookup[user.PublishedUser].Single();
+                var authorInfo = new AuthorInfo(userInfo.Name, userInfo.Id.Value);
+                var model = new PostMetaModel(user.Id, user.Slug, user.Title, user.Description, user.GoesLive.DateTime, authorInfo, user.Tags);
 
                 results.Add(model);
             }

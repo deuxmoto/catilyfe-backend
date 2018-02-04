@@ -62,10 +62,6 @@ AS
     SELECT TOP 1 @slug = slug FROM img.images WHERE id = @imageid
 
     COMMIT TRANSACTION
-
-    -- Get everything backs
-    EXECUTE @error = img.getimage @slug = @slug
-
     END TRY
     BEGIN CATCH
 
@@ -74,6 +70,10 @@ AS
         GOTO ErrorHandler
 
     END CATCH
+
+    -- Get everything backs
+    EXECUTE @error = img.getimage @error_message = @error_message
+                                 ,@slug = @slug
 
 RETURN @error
 

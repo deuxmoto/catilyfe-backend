@@ -45,7 +45,7 @@ AS
 
     COMMIT TRANSACTION
 
-    EXECUTE @error = img.getimage @slug = @slug
+    EXECUTE @error = img.getimage @error_message = @error_message, @slug = @slug
 
     END TRY
     BEGIN CATCH

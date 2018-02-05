@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CatiLyfe.Backend.ImageServices\CatiLyfe.Backend.ImageServices.csproj" />
     <ProjectReference Include="..\CatiLyfe.Backend.Web.Models\CatiLyfe.Backend.Web.Models.csproj" />
     <ProjectReference Include="..\CatiLyfe.Common\CatiLyfe.Common.csproj" />
     <ProjectReference Include="..\CatiLyfe.DataLayer.Sql\CatiLyfe.DataLayer.Sql.csproj" />

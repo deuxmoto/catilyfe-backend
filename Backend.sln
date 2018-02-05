@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.Backend.Web.Core", "CatiLyfe.Backend.Web.Core\CatiLyfe.Backend.Web.Core.csproj", "{9EC69DF4-7971-4240-B137-FE41AE544DD2}"
 EndProject
@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.DataLayer.Sql", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.Common.MSTest", "Unit\CatiLyfe.Common.MSTest\CatiLyfe.Common.MSTest.csproj", "{8D518533-95AF-43C7-847D-39590BDBC568}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatiLyfe.DataLayer.MSTest", "Unit\CatiLyfe.DataLayer.MSTest\CatiLyfe.DataLayer.MSTest.csproj", "{D42ADF1B-4D98-41E1-8F25-793795A724BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatiLyfe.DataLayer.MSTest", "Unit\CatiLyfe.DataLayer.MSTest\CatiLyfe.DataLayer.MSTest.csproj", "{D42ADF1B-4D98-41E1-8F25-793795A724BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatiLyfe.Backend.ImageServices", "CatiLyfe.Backend.ImageServices\CatiLyfe.Backend.ImageServices.csproj", "{3BF7008C-9D00-4035-B9F2-0B4B7A2CDF5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{D42ADF1B-4D98-41E1-8F25-793795A724BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D42ADF1B-4D98-41E1-8F25-793795A724BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D42ADF1B-4D98-41E1-8F25-793795A724BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BF7008C-9D00-4035-B9F2-0B4B7A2CDF5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF7008C-9D00-4035-B9F2-0B4B7A2CDF5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF7008C-9D00-4035-B9F2-0B4B7A2CDF5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF7008C-9D00-4035-B9F2-0B4B7A2CDF5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -52,6 +52,66 @@ namespace CatiLyfe.DataLayer.Sql
             return result.Item2.AsReadonly();
         }
 
+        public async Task<Image> SetImageDetails(Image image)
+        {
+            var result = await this.ExecuteReader("img.setimagedetails", parameters =>
+            {
+                parameters.AddWithValue("id", image.Id);
+                parameters.AddWithValue("slug", image.Slug);
+                parameters.AddWithValue("description", image.Description);
+            },
+            CatiImageDataLayer.ReadLink,
+            CatiImageDataLayer.ReadImage);
+
+            var linklookup = result.Item1.ToLookup(lnk => lnk.ImageId);
+            foreach (var img in result.Item2)
+            {
+                if (linklookup.Contains(img.Id))
+                {
+                    foreach (var link in linklookup[img.Id])
+
+                        img.Links.Add(link);
+                }
+            }
+
+            return result.Item2.Single();
+        }
+
+        /// <summary>
+        /// Sets an image link.
+        /// </summary>
+        /// <param name="link">The link</param>
+        /// <returns>The image.</returns>
+        public async Task<Image> SetImageLinks(ImageLink link)
+        {
+            var result = await this.ExecuteReader("img.setimagelink", parameters =>
+            {
+                parameters.AddWithValue("imageid", link.ImageId);
+                parameters.AddWithValue("linkid", link.LinkId);
+                parameters.AddWithValue("filetype", link.Format);
+                parameters.AddWithValue("width", link.Width);
+                parameters.AddWithValue("height", link.Height);
+                parameters.AddWithValue("adapter", link.Adapter);
+                parameters.AddWithValue("metadata", link.Metadata);
+            },
+            CatiImageDataLayer.ReadLink,
+            CatiImageDataLayer.ReadImage);
+
+            var linklookup = result.Item1.ToLookup(lnk => lnk.ImageId);
+            foreach (var img in result.Item2)
+            {
+                if (linklookup.Contains(img.Id))
+                {
+                    foreach (var lnData in linklookup[img.Id])
+                    {
+                        img.Links.Add(lnData);
+                    }
+                }
+            }
+
+            return result.Item2.Single();
+        }
+
         /// <summary>
         /// Read a link from SQL.
         /// </summary>

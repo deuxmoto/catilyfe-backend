@@ -27,6 +27,7 @@ namespace CatiLyfe.Backend.Web.Core
     using Microsoft.AspNetCore.Server.IISIntegration;
 
     using Swashbuckle.AspNetCore.Swagger;
+    using CatiLyfe.Backend.ImageServices;
 
     public class Startup
     {
@@ -52,6 +53,11 @@ namespace CatiLyfe.Backend.Web.Core
             var constr = this.Configuration.GetConnectionString("default");
             var authDataLayer = CatiDataLayerFactory.CreateAuthDataLayer(constr);
             var catiData = CatiDataLayerFactory.CreateDataLayer(constr);
+            var imageData = CatiDataLayerFactory.CreateImageDataLayer(constr);
+
+            var storageConnection = this.Configuration.GetConnectionString("images");
+
+            var imageUploader = ImageUploaderFactory.Create(imageData, storageConnection);
 
             var trace = new WebAppTrace(this.loggerFactory);
             trace.TraceInfo("Logger has been initialized.");
@@ -65,7 +71,9 @@ namespace CatiLyfe.Backend.Web.Core
             services.AddSingleton<ICatiDataLayer>(catiData);
             services.AddSingleton<ICatiAuthDataLayer>(authDataLayer);
             services.AddSingleton<IPostTranslator>(postTranslator);
+            services.AddSingleton<ICatiImageDataLayer>(imageData);
             services.AddSingleton<IContentTransformer>(contentTransformer);
+            services.AddSingleton<IImageUploader>(imageUploader);
             services.AddSingleton<IAuthorizationHandler, DefaultAuthorizationHandler>().AddAuthorization(
                 options =>
                     {

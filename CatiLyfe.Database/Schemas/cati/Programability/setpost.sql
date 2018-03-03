@@ -17,6 +17,7 @@ AS
 
     DECLARE @notFound           INT = 50001
     DECLARE @invalidArgs        INT = 50002
+    DECLARE @duplicateItem      INT = 50003
     DECLARE @revisionConflict   INT = 50004
 
     DECLARE @auditModify NVARCHAR(64) = 'Modified'
@@ -55,6 +56,13 @@ AS
     BEGIN
         SET @error = @invalidArgs
         SET @error_message = N'The published user id does not exist.'
+        GOTO ErrorHandler
+    END
+
+    IF (EXISTS (SELECT TOP 1 1 FROM img.images WHERE slug = @slug AND id <> @id) OR ((EXISTS (SELECT TOP 1 1 FROM img.images WHERE slug = @slug)) AND @id IS NULL))
+    BEGIN
+        SET @error = @duplicateItem
+        SET @error_message = CONCAT(N'The slug', @slug, N'is already taken');
         GOTO ErrorHandler
     END
 

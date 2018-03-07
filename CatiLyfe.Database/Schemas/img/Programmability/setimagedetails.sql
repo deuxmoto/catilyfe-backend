@@ -12,6 +12,7 @@ AS
 
     DECLARE @error INT = 0
     DECLARE @itemnotfound INT = 50001
+    DECLARE @duplicateItem INT = 50003
 
     BEGIN TRANSACTION
     BEGIN TRY
@@ -20,6 +21,20 @@ AS
         BEGIN
             SET @error = @itemnotfound
             SET @error_message = CONCAT(N'The item with the id ''', @id, N''' does not exist.')
+            GOTO ErrorHandler
+        END
+
+        IF (@id IS NULL AND EXISTS (SELECT TOP 1 1 FROM img.images WHERE slug = @slug))
+        BEGIN
+            SET @error = @duplicateItem
+            SET @error_message = CONCAT(N'The item with the slug ''', @slug, N''' already exists.')
+            GOTO ErrorHandler
+        END
+
+        IF (@id IS NOT NULL AND EXISTS (SELECT TOP 1 1 FROM img.images WHERE slug = @slug AND id <> @id))
+        BEGIN
+            SET @error = @itemnotfound
+            SET @error_message = CONCAT(N'The slug ''', @slug, N''' is already takens.')
             GOTO ErrorHandler
         END
 

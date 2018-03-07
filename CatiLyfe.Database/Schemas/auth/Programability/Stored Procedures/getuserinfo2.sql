@@ -2,6 +2,8 @@
     @error_message  NVARCHAR(2048) OUTPUT
    ,@fuzzy          BIT           = 0
    ,@token          VARBINARY(64) = NULL
+   ,@top            INT           = 100
+   ,@skip           INT           = 0
    ,@ids            auth.idlist     READONLY
    ,@emails         auth.stringlist READONLY
    ,@names          auth.stringlist READONLY
@@ -13,28 +15,54 @@ AS
 
     DECLARE @selectedids auth.idlist
 
-    INSERT INTO @selectedids
-    (
-        id
-    )
-    SELECT u.id
-    FROM auth.users u
-    JOIN @ids i
-      ON i.id = u.id
-    UNION
-    SELECT u.id
-    FROM auth.users u
-    JOIN @emails e
-      ON (@fuzzy = 0 AND e.string = u.email) OR (@fuzzy = 1 AND CONCAT('%', e.string, '%') LIKE u.email)
-    UNION
-    SELECT u.id
-    FROM auth.users u
-    JOIN @names n
-      ON (@fuzzy = 0 AND n.string = u.name) OR (@fuzzy = 1 AND CONCAT('%', n.string, '%') LIKE u.name)
-    UNION
-    SELECT t.userid AS id
-    FROM auth.tokens t
-    WHERE t.token = @token
+    IF (@token IS NULL AND (NOT EXISTS (SELECT TOP 1 1 FROM @ids)) 
+            AND (NOT EXISTS (SELECT TOP 1 1 FROM @ids))
+            AND (NOT EXISTS (SELECT TOP 1 1 FROM @emails))
+            AND (NOT EXISTS (SELECT TOP 1 1 FROM @names)))
+    BEGIN
+        INSERT INTO @selectedids
+        (
+            id
+        )
+        SELECT id 
+        FROM auth.users
+        ORDER BY id
+        OFFSET (@skip) ROWS
+        FETCH NEXT (@top) ROWS ONLY
+    END
+    ELSE
+    BEGIN
+        WITH filteredIds AS
+        (
+            SELECT u.id
+            FROM auth.users u
+            JOIN @ids i
+              ON i.id = u.id
+            UNION
+            SELECT u.id
+            FROM auth.users u
+            JOIN @emails e
+              ON (@fuzzy = 0 AND e.string = u.email) OR (@fuzzy = 1 AND CONCAT('%', e.string, '%') LIKE u.email)
+            UNION
+            SELECT u.id
+            FROM auth.users u
+            JOIN @names n
+              ON (@fuzzy = 0 AND n.string = u.name) OR (@fuzzy = 1 AND CONCAT('%', n.string, '%') LIKE u.name)
+            UNION
+            SELECT t.userid AS id
+            FROM auth.tokens t
+            WHERE t.token = @token
+        )
+        INSERT INTO @selectedids
+        (
+            id
+        )
+        SELECT id 
+        FROM filteredIds
+        ORDER BY id
+        OFFSET (@skip) ROWS
+        FETCH NEXT (@top) ROWS ONLY
+    END
 
     -- OUTPUT all of the roles
     SELECT

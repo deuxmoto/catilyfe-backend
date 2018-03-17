@@ -1,4 +1,5 @@
-﻿using CatiLyfe.Backend.Web.Models.User;
+﻿using CatiLyfe.Backend.ImageServices;
+using CatiLyfe.Backend.Web.Models.User;
 using CatiLyfe.Common.Security;
 using CatiLyfe.DataLayer;
 using CatiLyfe.DataLayer.Models;
@@ -22,13 +23,25 @@ namespace CatiLyfe.Backend.Web.Models
         private readonly IContentTransformer contentTransformer;
 
         /// <summary>
+        /// The image data layer.
+        /// </summary>
+        private readonly ICatiImageDataLayer imageDataLayer;
+
+        /// <summary>
+        /// The image uploader.
+        /// </summary>
+        private readonly IImageUploader uploader;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PostTranslator"/> class.
         /// </summary>
         /// <param name="authData"></param>
-        public PostTranslator(ICatiAuthDataLayer authData, IContentTransformer contentTransformer)
+        public PostTranslator(ICatiAuthDataLayer authData, IContentTransformer contentTransformer, ICatiImageDataLayer imageDataLayer, IImageUploader uploader)
         {
             this.authDataLayer = authData;
             this.contentTransformer = contentTransformer;
+            this.imageDataLayer = imageDataLayer;
+            this.uploader = uploader;
         }
 
         /// <summary>
@@ -67,7 +80,20 @@ namespace CatiLyfe.Backend.Web.Models
             {
                 var userInfo = userslookup[user.PublishedUser].Single();
                 var authorInfo = new AuthorInfo(userInfo.Name, userInfo.Id.Value);
-                var model = new PostMetaModel(user.Id, user.Slug, user.Title, user.Description, user.GoesLive.DateTime, authorInfo, user.Tags);
+
+                string url = null;
+                if(user.DefaultImageId != null)
+                {
+                    var image = await this.imageDataLayer.GetImage(user.DefaultImageId);
+
+                    var link = image.FirstOrDefault()?.Links.FirstOrDefault();
+                    if(link != null)
+                    {
+                        url = await this.uploader.GetUrl(link);
+                    }
+                }
+
+                var model = new PostMetaModel(user.Id, user.Slug, user.Title, user.Description, user.GoesLive.DateTime, authorInfo, url, user.Tags);
 
                 results.Add(model);
             }

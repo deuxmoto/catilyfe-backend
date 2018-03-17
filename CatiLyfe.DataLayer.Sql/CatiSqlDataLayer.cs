@@ -208,6 +208,7 @@
                                       parmeters.AddWithValue("ispublished", post.MetaData.IsPublished);
                                       parmeters.AddWithValue("isreserved", post.MetaData.IsReserved);
                                       parmeters.AddWithValue("revision", post.MetaData.Revision);
+                                      parmeters.AddWithValue("defaultimageid", (object)post.MetaData.DefaultImageId ?? DBNull.Value);
                                       parmeters.AddWithValue("publisheduser", post.MetaData.PublishedUser);
 
                                       var contentList = parmeters.AddWithValue(

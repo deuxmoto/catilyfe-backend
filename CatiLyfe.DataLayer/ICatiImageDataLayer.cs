@@ -12,11 +12,12 @@ namespace CatiLyfe.DataLayer
         /// <summary>
         /// Get matching images.
         /// </summary>
+        /// <param name="id">The image id.</param>
         /// <param name="slug">The image slug.</param>
         /// <param name="top">Number to get.</param>
         /// <param name="skip">Number to skip.</param>
         /// <returns>The images.</returns>
-        Task<IReadOnlyCollection<Image>> GetImage(string slug = null, int top = 100, int skip = 0);
+        Task<IReadOnlyCollection<Image>> GetImage(int? id = null, string slug = null, int top = 100, int skip = 0);
 
         /// <summary>
         /// Set an image details.

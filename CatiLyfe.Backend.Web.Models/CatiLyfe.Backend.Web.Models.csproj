@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CatiLyfe.Backend.ImageServices\CatiLyfe.Backend.ImageServices.csproj" />
     <ProjectReference Include="..\CatiLyfe.Common\CatiLyfe.Common.csproj" />
     <ProjectReference Include="..\CatiLyfe.DataLayer\CatiLyfe.DataLayer.csproj" />
   </ItemGroup>

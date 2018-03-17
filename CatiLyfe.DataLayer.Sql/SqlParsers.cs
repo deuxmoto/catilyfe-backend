@@ -24,7 +24,8 @@ namespace CatiLyfe.DataLayer.Sql
                 isPublished: (bool)reader["ispublished"],
                 isDeleted: (bool)reader["isdeleted"],
                 revision: (int)reader["revision"],
-                publishedUserId: (int)reader["publisheduser"]);
+                publishedUserId: (int)reader["publisheduser"],
+                defaultImageId: reader["defaultimageid"] == DBNull.Value ? null : (int?)reader["defaultimageid"]);
         }
 
         /// <summary>

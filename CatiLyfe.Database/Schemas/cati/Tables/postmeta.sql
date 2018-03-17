@@ -11,4 +11,5 @@
    ,isreserved      BIT             NOT NULL
    ,revision        INT             NOT NULL
    ,publisheduser   INT             NOT NULL
+   ,defaultimageid  INT             NULL
 )

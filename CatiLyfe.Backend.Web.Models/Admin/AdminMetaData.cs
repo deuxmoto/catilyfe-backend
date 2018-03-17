@@ -33,6 +33,7 @@
             this.IsDeleted = meta.IsDeleted;
             this.Revision = meta.Revision;
             this.Tags = meta.Tags;
+            this.AuthorId = meta.PublishedUser;
             this.History = meta.History.Select(h => new AdminAuditHistory(h)).ToList();
         }
 

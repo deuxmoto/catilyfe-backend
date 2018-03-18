@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-
+    using CatiLyfe.Backend.Web.Models.Images;
     using CatiLyfe.DataLayer.Models;
 
     /// <summary>
@@ -33,6 +33,7 @@
             this.IsDeleted = meta.IsDeleted;
             this.Revision = meta.Revision;
             this.Tags = meta.Tags;
+            this.DefaultImage = meta.DefaultImageId;
             this.AuthorId = meta.PublishedUser;
             this.History = meta.History.Select(h => new AdminAuditHistory(h)).ToList();
         }
@@ -103,6 +104,8 @@
         /// </summary>
         public int AuthorId { get; set; }
 
+        public int? DefaultImage { get; set; }
+
         /// <summary>
         /// The tags for the post.
         /// </summary>
@@ -132,6 +135,7 @@
                 isDeleted: this.IsDeleted,
                 revision: this.Revision,
                 publishedUserId: this.AuthorId,
+                defaultImageId: this.DefaultImage,
                 tags: this.Tags ?? Enumerable.Empty<string>(),
                 history: this.History?.Select(h => h.ToPostAuditHistory()) ?? Enumerable.Empty<PostAuditHistory>());
         }

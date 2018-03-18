@@ -42,7 +42,7 @@ namespace CatiLyfe.Backend.Web.Core.Controllers
             var slug = headers["cati-image-slug"];
             var description = headers["cati-image-description"];
 
-            if(string.IsNullOrWhiteSpace(slug) || string.IsNullOrWhiteSpace(description))
+            if (string.IsNullOrWhiteSpace(slug) || string.IsNullOrWhiteSpace(description))
             {
                 throw new ModelValidationException("Neither slug or description can be empty.");
             }
@@ -70,7 +70,8 @@ namespace CatiLyfe.Backend.Web.Core.Controllers
         /// <returns>The link models.</returns>
         private async Task<IReadOnlyCollection<ImageLinkModel>> GetLinks(IEnumerable<ImageLink> links)
         {
-            return await Task.WhenAll(links.Select(async l => {
+            return await Task.WhenAll(links.Select(async l =>
+            {
                 var url = await this.uploader.GetUrl(l);
                 var lnk = new ImageLinkModel(l.LinkId.Value, l.Width, l.Height, url);
                 return lnk;

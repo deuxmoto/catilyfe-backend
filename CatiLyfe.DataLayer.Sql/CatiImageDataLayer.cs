@@ -23,14 +23,16 @@ namespace CatiLyfe.DataLayer.Sql
         /// <summary>
         /// Get matching images.
         /// </summary>
+        /// <param name="id">The image id.</param>
         /// <param name="slug">The image slug.</param>
         /// <param name="top">Number to get.</param>
         /// <param name="skip">Number to skip.</param>
         /// <returns>The images.</returns>
-        public async Task<IReadOnlyCollection<Image>> GetImage(string slug = null, int top = 100, int skip = 0)
+        public async Task<IReadOnlyCollection<Image>> GetImage(int? id, string slug = null, int top = 100, int skip = 0)
         {
             var result = await this.ExecuteReader("img.getimage", parameters =>
             {
+                parameters.AddWithValue("id", id);
                 parameters.AddWithValue("slug", slug);
                 parameters.AddWithValue("top", top);
                 parameters.AddWithValue("skip", skip);

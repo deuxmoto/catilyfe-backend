@@ -67,7 +67,7 @@ namespace CatiLyfe.Backend.Web.Core
 
 
             var contentTransformer = new MarkdownProcessor();
-            var postTranslator = PostTranslatorFactory.Create(authDataLayer, contentTransformer);
+            var postTranslator = PostTranslatorFactory.Create(authDataLayer, contentTransformer, imageData, imageUploader);
 
             // Add the data layers.
             services.AddSingleton<IProgramTrace>(trace);

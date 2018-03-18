@@ -52,6 +52,7 @@ AS
        ,isdeleted       BIT             NOT NULL
        ,revision        INT             NOT NULL
        ,publisheduser   INT             NOT NULL
+       ,defaultimageid  INT             NULL
     )
 
     INSERT INTO @selected
@@ -67,6 +68,7 @@ AS
        ,m.isdeleted
        ,m.revision
        ,m.publisheduser
+       ,m.defaultimageid
     FROM cati.postmeta m
     WHERE ((m.goeslive BETWEEN @startdate AND @enddate) OR @startdate IS NULL)
       AND (isdeleted = 0 OR @includeDeleted = 1)

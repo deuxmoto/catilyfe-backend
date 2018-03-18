@@ -76,6 +76,7 @@ AS
        ,p.isdeleted
        ,p.revision
        ,p.publisheduser
+       ,p.defaultimageid
     FROM cati.postmeta p
     JOIN @selectedIds id
       ON id.id = p.id

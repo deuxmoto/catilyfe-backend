@@ -2,6 +2,7 @@
 
 CREATE PROCEDURE img.[getimage]
     @error_message NVARCHAR(2048) OUTPUT
+   ,@id                    INT           = NULL
    ,@slug                  NVARCHAR(128) = NULL
    ,@top                   INT           = NULL
    ,@skip                  INT           = NULL
@@ -21,10 +22,7 @@ AS
     INSERT INTO @ids
     SELECT i.id FROM img.images i
     WHERE (i.slug = @slug OR @slug IS NULL)
-<<<<<<< Updated upstream
-=======
        AND (i.id = @id OR @id IS NULL)
->>>>>>> Stashed changes
     ORDER BY i.slug ASC
     OFFSET (@skip) ROWS 
     FETCH NEXT (@top) ROWS ONLY

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CatiLyfe.Backend.ImageServices.Models;
 using CatiLyfe.Common.Utilities;
 using CatiLyfe.DataLayer;
 using CatiLyfe.DataLayer.Models.Images;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using SkiaSharp;
 
 namespace CatiLyfe.Backend.ImageServices
@@ -16,10 +18,13 @@ namespace CatiLyfe.Backend.ImageServices
 
         private readonly CloudStorageAccount account;
 
-        public AzureStorageImageUploader(ICatiImageDataLayer imageData, string connectionString)
+        private readonly int[] imageWidths;
+
+        public AzureStorageImageUploader(ICatiImageDataLayer imageData, string connectionString, int[] imageWidths)
         {
             this.imageData = imageData;
             this.account = CloudStorageAccount.Parse(connectionString);
+            this.imageWidths = imageWidths;
         }
 
         public Task<string> GetUrl(ImageLink link)
@@ -44,43 +49,46 @@ namespace CatiLyfe.Backend.ImageServices
                 PublicAccess = Microsoft.WindowsAzure.Storage.Blob.BlobContainerPublicAccessType.Blob
             });
 
-            int width, height;
-            string name;
-            string format;
-            string url;
-
             using (var input = new SKManagedStream(image))
             using (var codec = SKCodec.Create(input))
             {
-                var newHeight = ComplexMath.RoundDownP2(codec.Info.Height);
-                var ratio = (float)newHeight / (float)codec.Info.Height;
-                var supportedScale = codec.GetScaledDimensions(ratio);
-
-                width = supportedScale.Width;
-                height = supportedScale.Height;
-                format = codec.EncodedFormat.ToString();
-                name = $"{dbImage.Slug}_{width}_{height}";
-
-                var blobRef = container.GetBlockBlobReference(name);
-                url = blobRef.StorageUri.PrimaryUri.ToString();
-
-                using (var resultBitmap = SKBitmap.Decode(codec))
-                using (var resizedBitmap = resultBitmap.Resize(new SKImageInfo(supportedScale.Width, supportedScale.Height), SKBitmapResizeMethod.Lanczos3))
-                using (var resultImage = SKImage.FromBitmap(resizedBitmap))
-                using (var imageStream = resultImage.Encode(codec.EncodedFormat, 100).AsStream())
+                foreach(var width in this.imageWidths)
                 {
-                    using (var outputSTream = await blobRef.OpenWriteAsync())
-                    {
-                        await imageStream.CopyToAsync(outputSTream);
-                    }
+                    await this.UploadToAzure(dbImage, codec, container, width);
+                }
+            }
+
+            return (await this.imageData.GetImage(id: dbImage.Id.Value)).Single();
+        }
+
+        private async Task UploadToAzure(Image dbImage, SKCodec codec, CloudBlobContainer container, int desiredWidth)
+        {
+            var ratio = (float)desiredWidth / (float)codec.Info.Width;
+            var supportedScale = codec.GetScaledDimensions(ratio);
+
+            SKEncodedImageFormat target = codec.EncodedFormat == SKEncodedImageFormat.Gif ? SKEncodedImageFormat.Gif : SKEncodedImageFormat.Png;
+
+            var width = supportedScale.Width;
+            var height = supportedScale.Height;
+            var format = target.ToString();
+            var name = $"{dbImage.Slug}_{width}_{height}";
+
+            var blobRef = container.GetBlockBlobReference(name);
+            var url = blobRef.StorageUri.PrimaryUri.ToString();
+
+            using (var resultBitmap = SKBitmap.Decode(codec))
+            using (var resizedBitmap = resultBitmap.Resize(new SKImageInfo(supportedScale.Width, supportedScale.Height), SKBitmapResizeMethod.Lanczos3))
+            using (var resultImage = SKImage.FromBitmap(resizedBitmap))
+            using (var imageStream = resultImage.Encode(target, 100).AsStream())
+            {
+                using (var outputSTream = await blobRef.OpenWriteAsync())
+                {
+                    await imageStream.CopyToAsync(outputSTream);
                 }
             }
 
             var data = new AzureAdapterMetadata(this.account.BlobEndpoint.ToString(), container.Name, name, url);
-
-            dbImage = await this.imageData.SetImageLinks(new ImageLink(dbImage.Id, null, width, height, format, ImageAdapter.AzureFile, data.ToString()));
-
-            return dbImage;
+            await this.imageData.SetImageLinks(new ImageLink(dbImage.Id, null, width, height, format, ImageAdapter.AzureFile, data.ToString()));
         }
     }
 }

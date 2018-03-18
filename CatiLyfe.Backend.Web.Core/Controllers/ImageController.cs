@@ -27,9 +27,9 @@ namespace CatiLyfe.Backend.Web.Core.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ImageModel>> GetImages(int top = 100, int skip = 0)
+        public async Task<IEnumerable<ImageModel>> GetImages(int? id = null, string slug = null, int top = 100, int skip = 0)
         {
-            var dbImages = await this.imageData.GetImage(slug: null, top: top, skip: skip);
+            var dbImages = await this.imageData.GetImage(id: id, slug: slug, top: top, skip: skip);
 
             return await Task.WhenAll(dbImages.Select(i => this.GetImage(i)));
         }

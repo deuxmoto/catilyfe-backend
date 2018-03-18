@@ -7,9 +7,16 @@ namespace CatiLyfe.Backend.ImageServices
 {
     public static class ImageUploaderFactory
     {
-        public static IImageUploader Create(ICatiImageDataLayer imageData, string storageAccountConnection)
+        /// <summary>
+        /// Creates the image uploaded.
+        /// </summary>
+        /// <param name="imageData">The iamge data layer</param>
+        /// <param name="storageAccountConnection">The storage account conntection</param>
+        /// <param name="imageWidths">The image widths.</param>
+        /// <returns></returns>
+        public static IImageUploader Create(ICatiImageDataLayer imageData, string storageAccountConnection, int[] imageWidths)
         {
-            return new AzureStorageImageUploader(imageData, storageAccountConnection);
+            return new AzureStorageImageUploader(imageData, storageAccountConnection, imageWidths);
         }
     }
 }

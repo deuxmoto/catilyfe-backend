@@ -51,13 +51,16 @@ namespace CatiLyfe.Backend.Web.Core
         public void ConfigureServices(IServiceCollection services)
         {
             var constr = this.Configuration.GetConnectionString("default");
+            var imageSection = this.Configuration.GetSection("image");
+
             var authDataLayer = CatiDataLayerFactory.CreateAuthDataLayer(constr);
             var catiData = CatiDataLayerFactory.CreateDataLayer(constr);
             var imageData = CatiDataLayerFactory.CreateImageDataLayer(constr);
 
             var storageConnection = this.Configuration.GetConnectionString("images");
 
-            var imageUploader = ImageUploaderFactory.Create(imageData, storageConnection);
+            var imageWidths = imageSection.GetSection("widths").Get<int[]>();
+            var imageUploader = ImageUploaderFactory.Create(imageData, storageConnection, imageWidths);
 
             var trace = new WebAppTrace(this.loggerFactory);
             trace.TraceInfo("Logger has been initialized.");

@@ -22,7 +22,7 @@ AS
     INSERT INTO @ids
     SELECT i.id FROM img.images i
     WHERE (i.slug = @slug OR @slug IS NULL)
-       OR (i.id = @id OR @id IS NULL)
+       AND (i.id = @id OR @id IS NULL)
     ORDER BY i.slug ASC
     OFFSET (@skip) ROWS 
     FETCH NEXT (@top) ROWS ONLY

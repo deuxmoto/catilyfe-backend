@@ -141,6 +141,7 @@
     <Build Include="Schemas\img\Programmability\getimage.sql" />
     <Build Include="Schemas\img\Programmability\setimagedetails.sql" />
     <Build Include="Schemas\img\Programmability\setimagelink.sql" />
+    <Build Include="Schemas\img\Index\images_whencreated_default.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CatiLyfe.Database.publish.xml" />

@@ -1,5 +1,6 @@
 using CatiLyfe.DataLayer.Models.Images;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace CatiLyfe.DataLayer.MSTest
 {
@@ -8,20 +9,23 @@ namespace CatiLyfe.DataLayer.MSTest
     /// </summary>
     [TestClass]
     public class ModelTests
-    {
         /// <summary>
+    {
         /// Test the image model.
         /// </summary>
         [TestMethod]
         public void TestImage()
         {
+            var testTime = new DateTime(2000, 1, 1);
+
             var link = new ImageLink(0, 0, 0, 0, "asdf", ImageAdapter.Unknown, "");
-            var image = new Image(id: 5, slug: "slug", description: "description", links: new[] { link });
+            var image = new Image(id: 5, slug: "slug", description: "description", whenCreated: testTime, links: new[] { link });
 
             Assert.AreEqual(5, image.Id);
             Assert.AreEqual("slug", image.Slug);
             Assert.AreEqual("description", image.Description);
             Assert.AreEqual(1, image.Links.Count);
+            Assert.AreEqual(testTime, image.WhenCreated);
         }
 
         /// <summary>

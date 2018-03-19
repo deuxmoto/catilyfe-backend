@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CatiLyfe.DataLayer.Models.Images
 {
@@ -10,12 +11,14 @@ namespace CatiLyfe.DataLayer.Models.Images
         /// <param name="id">The id.</param>
         /// <param name="slug">The slug.</param>
         /// <param name="description">The description</param>
+        /// <param name="whenCreated">When the image was created.</param>
         /// <param name="links">The list of links.</param>
-        public Image(int? id, string slug, string description, IEnumerable<ImageLink> links)
+        public Image(int? id, string slug, string description, DateTime whenCreated, IEnumerable<ImageLink> links)
         {
             this.Id = id;
             this.Slug = slug;
             this.Description = description;
+            this.WhenCreated = whenCreated;
             this.Links = new List<ImageLink>(links);
         }
 
@@ -33,6 +36,11 @@ namespace CatiLyfe.DataLayer.Models.Images
         /// Gets the image description.
         /// </summary>
         public string Description { get; }
+
+        /// <summary>
+        /// When the image was created.
+        /// </summary>
+        public DateTime WhenCreated { get; }
 
         /// <summary>
         /// Gets the list of image links

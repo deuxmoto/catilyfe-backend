@@ -134,7 +134,7 @@ namespace CatiLyfe.DataLayer.Sql
         /// <returns>The image.</returns>
         private static Image ReadImage(SqlDataReader reader)
         {
-            return new Image((int)reader["id"], (string)reader["slug"], (string)reader["description"], Enumerable.Empty<ImageLink>());
+            return new Image((int)reader["id"], (string)reader["slug"], (string)reader["description"], (DateTime)reader["whencreated"], Enumerable.Empty<ImageLink>());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CatiLyfe.Backend.Web.Models.Images
@@ -11,12 +12,14 @@ namespace CatiLyfe.Backend.Web.Models.Images
         /// <param name="id">The image id.</param>
         /// <param name="description">The image description.</param>
         /// <param name="slug">The image slug.</param>
+        /// <param name="whenCreated">When the image was created.</param>
         /// <param name="links">The image links.</param>
-        public ImageModel(int id, string description, string slug, IEnumerable<ImageLinkModel> links)
+        public ImageModel(int id, string description, string slug, DateTime whenCreated, IEnumerable<ImageLinkModel> links)
         {
             this.Id = id;
             this.Description = description;
             this.Slug = slug;
+            this.WhenCreated = whenCreated;
             this.Links = links.ToArray();
         }
 
@@ -34,6 +37,11 @@ namespace CatiLyfe.Backend.Web.Models.Images
         /// Gets the slug.
         /// </summary>
         public string Slug { get; private set; }
+
+        /// <summary>
+        /// Gets when the image was created.
+        /// </summary>
+        public DateTime WhenCreated { get; private set; }
 
         /// <summary>
         /// All available links.

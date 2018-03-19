@@ -5,6 +5,7 @@ using CatiLyfe.DataLayer;
 using CatiLyfe.DataLayer.Models.Images;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace CatiLyfe.Backend.Web.Core.Controllers
                 throw new ModelValidationException("Neither slug or description can be empty.");
             }
 
-            var img = new Image(id == 0 ? (int?)null : id, slug, description, Enumerable.Empty<ImageLink>());
+            var img = new Image(id == 0 ? (int?)null : id, slug, description, default(DateTime), Enumerable.Empty<ImageLink>());
 
             using (var reader = file.OpenReadStream())
             {
@@ -60,7 +61,7 @@ namespace CatiLyfe.Backend.Web.Core.Controllers
         private async Task<ImageModel> GetImage(Image image)
         {
             var links = await this.GetLinks(image.Links);
-            return new ImageModel(image.Id.Value, image.Description, image.Slug, links);
+            return new ImageModel(image.Id.Value, image.Description, image.Slug, image.WhenCreated, links);
         }
 
         /// <summary>

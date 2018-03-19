@@ -43,6 +43,7 @@ AS
         img.id
        ,img.slug
        ,img.description
+       ,img.whencreated
     FROM img.images img
     JOIN @ids i
       ON img.id = i.id
